@@ -65,7 +65,7 @@ function SignInForm({ onSubmit }) {
         {/* Link */}
         <p className="text-center text-sm text-gray-500 mt-4">
           Don't have an account?{" "}
-          <a href="/" className="text-blue-500 font-medium hover:text-blue-600">
+          <a href="/signup" className="text-blue-500 font-medium hover:text-blue-600">
             Sign up
           </a>
         </p>
