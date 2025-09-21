@@ -1,27 +1,47 @@
 import React from 'react';
-import { Plus, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
+import { useConversationState, useChatState } from '../hooks/redux';
+import { createNewConversation, deleteConversation } from '../store/slices/conversationSlice';
+import { setCurrentConversation, setNewConversation, setMessages, setWelcomeScreen, clearMessages } from '../store/slices/chatSlice';
 
 const Sidebar = ({ isCollapsed, onToggle }) => {
+  const { conversation, dispatch } = useConversationState();
+  const { chat, dispatch: chatDispatch } = useChatState();
   
-  // Sample conversation data
-  const conversations = [
-    {
-      id: 1,
-      title: "hi",
-      preview: "I understand your question. Let me help yo...",
-      timestamp: "Today"
-    },
-    {
-      id: 2,
-      title: "hi",
-      preview: "I understand your question. Let me help yo...",
-      timestamp: "Today"
+  const handleNewChat = () => {
+    // Create new conversation first
+    dispatch(createNewConversation());
+    
+    // Get the newly created conversation ID (it will be the first one in the array)
+    const newConversationId = conversation.nextId;
+    
+    // Set the new conversation with welcome screen
+    chatDispatch(setNewConversation(newConversationId));
+  };
+
+  const handleConversationClick = (conversationId) => {
+    const selectedConversation = conversation.conversations.find(conv => conv.id === conversationId);
+    if (selectedConversation) {
+      chatDispatch(setCurrentConversation(conversationId));
+      chatDispatch(setMessages(selectedConversation.messages || []));
+      chatDispatch(setWelcomeScreen(selectedConversation.messages.length === 0));
     }
-  ];
+  };
+
+  const handleDeleteConversation = (conversationId, e) => {
+    e.stopPropagation();
+    dispatch(deleteConversation(conversationId));
+    
+    // If we're deleting the current conversation, clear the chat
+    if (chat.currentConversationId === conversationId) {
+      chatDispatch(clearMessages());
+      chatDispatch(setWelcomeScreen(true));
+    }
+  };
 
   return (
-    <div className={`bg-gray-50 border-r shadow-outer border-gray-200 flex flex-col h-screen transition-all duration-300 ${
-      isCollapsed ? 'w-16' : 'w-80'
+    <div className={`bg-gray-50 border-r shadow-outer border-gray-200 flex flex-col h-screen transition-all duration-300 ease-in-out ${
+      isCollapsed ? 'w-16' : 'w-72'
     }`}>
 
 
@@ -40,7 +60,10 @@ const Sidebar = ({ isCollapsed, onToggle }) => {
             </div>
             
             {/* New Chat Button */}
-            <button className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-2xl p-3 mb-4 flex items-center justify-center gap-2 transition-colors">
+            <button 
+              onClick={handleNewChat}
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-2xl p-3 mb-4 flex items-center justify-center gap-2 transition-colors"
+            >
               <Plus className="w-5 h-5" />
               New Chat
             </button>
@@ -48,19 +71,35 @@ const Sidebar = ({ isCollapsed, onToggle }) => {
 
           {/* Conversation List */}
           <div className="px-4 pb-4 flex-1 overflow-y-auto">
-            {conversations.map((conversation) => (
+            {conversation.conversations.map((conv) => (
               <div
-                key={conversation.id}
-                className="p-3 mb-2  rounded-lg border border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
+                key={conv.id}
+                onClick={() => handleConversationClick(conv.id)}
+                className={`p-3 mb-2 rounded-lg border border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors relative group ${
+                  chat.currentConversationId === conv.id ? 'bg-blue-50 border-blue-200' : ''
+                }`}
               >
-                <div className="font-medium text-gray-800 text-sm mb-1">
-                  {conversation.title}
-                </div>
-                <div className="text-xs text-gray-500 mb-2 line-clamp-2">
-                  {conversation.preview}
-                </div>
-                <div className="text-xs text-gray-400">
-                  {conversation.timestamp}
+                <div className="flex items-start justify-between">
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-gray-800 text-sm mb-1 truncate">
+                      {conv.title}
+                    </div>
+                    <div className="text-xs text-gray-500 mb-2 line-clamp-2">
+                      {conv.preview}
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      {conv.timestamp}
+                    </div>
+                  </div>
+                  
+                  {/* Delete button */}
+                  <button
+                    onClick={(e) => handleDeleteConversation(conv.id, e)}
+                    className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-100 rounded transition-all duration-200"
+                    title="Delete conversation"
+                  >
+                    <Trash2 className="w-3 h-3 text-red-500" />
+                  </button>
                 </div>
               </div>
             ))}
@@ -81,7 +120,10 @@ const Sidebar = ({ isCollapsed, onToggle }) => {
           {/* Divider */}
           <div className="border-t border-gray-200 my-4"></div>
           
-          <button className="w-full p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-2xl flex items-center justify-center transition-colors">
+          <button 
+            onClick={handleNewChat}
+            className="w-full p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-2xl flex items-center justify-center transition-colors"
+          >
             <Plus className="w-5 h-5" />
           </button>
         </div>

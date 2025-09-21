@@ -1,18 +1,16 @@
 import { useState } from "react";
 import { Bell, ChevronDown } from "lucide-react";
 import { User, Settings, LogOut } from "lucide-react";
+import { useTokenState } from "../hooks/redux";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [unseen, setUnseen] = useState(true);
-
-
-  // Example dynamic token count (replace with real logic)
-  const tokenCount = 1247;
+  const { token } = useTokenState();
 
   return (
-    <div className="flex items-center justify-between px-6 py-3 bg-white  shadow-md">
+    <div className="flex items-center justify-between px-6 py-3 bg-white shadow-lg shadow-gray-200/50">
       {/* Left: Title */}
       <div className="text-xl font-semibold">AI Chat</div>
 
@@ -37,7 +35,7 @@ export default function Navbar() {
             <path d="M18 5v1a6 6 0 0 1-6 6H5" />
             <circle cx="18" cy="16" r="6" />
           </svg>
-          {tokenCount.toLocaleString()}
+          {token.tokensRemaining.toLocaleString()}
         </div>
 
         {/* Notifications */}
@@ -78,7 +76,7 @@ export default function Navbar() {
                       </div>
                     </div>
                     <span className="text-gray-500 text-sm pb-2">
-                      Welcome to AI Chat. You have 1,250 credits to start with.
+                      Welcome to AI Chat. You have {token.tokensRemaining.toLocaleString()} credits to start with.
                     </span>
                   </li>
                 </div>
