@@ -10,7 +10,7 @@ export default function Navbar() {
   const { token } = useTokenState();
 
   return (
-    <div className="flex items-center justify-between px-6 py-3 bg-white shadow-lg shadow-gray-200/50">
+    <div className="flex items-center justify-between px-6 py-3 bg-white shadow-lg shadow-gray-200/50 border-b border-gray-200">
       {/* Left: Title */}
       <div className="text-xl font-semibold">AI Chat</div>
 

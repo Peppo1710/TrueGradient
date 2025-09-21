@@ -71,38 +71,52 @@ const Sidebar = ({ isCollapsed, onToggle }) => {
 
           {/* Conversation List */}
           <div className="px-4 pb-4 flex-1 overflow-y-auto">
-            {conversation.conversations.map((conv) => (
-              <div
-                key={conv.id}
-                onClick={() => handleConversationClick(conv.id)}
-                className={`p-3 mb-2 rounded-lg border border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors relative group ${
-                  chat.currentConversationId === conv.id ? 'bg-blue-50 border-blue-200' : ''
-                }`}
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium text-gray-800 text-sm mb-1 truncate">
-                      {conv.title}
-                    </div>
-                    <div className="text-xs text-gray-500 mb-2 line-clamp-2">
-                      {conv.preview}
-                    </div>
-                    <div className="text-xs text-gray-400">
-                      {conv.timestamp}
-                    </div>
-                  </div>
-                  
-                  {/* Delete button */}
-                  <button
-                    onClick={(e) => handleDeleteConversation(conv.id, e)}
-                    className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-100 rounded transition-all duration-200"
-                    title="Delete conversation"
-                  >
-                    <Trash2 className="w-3 h-3 text-red-500" />
-                  </button>
+            {conversation.conversations.length === 0 ? (
+              /* No conversations yet state */
+              <div className="flex flex-col items-center justify-center h-full text-center">
+                <div className="mb-4">
+                  <img 
+                    src="/Chat_icon.png" 
+                    alt="Chat Icon" 
+                    className="w-12 h-12 object-contain opacity-60"
+                  />
                 </div>
+                <p className="text-gray-500 text-sm">No conversations yet</p>
               </div>
-            ))}
+            ) : (
+              conversation.conversations.map((conv) => (
+                <div
+                  key={conv.id}
+                  onClick={() => handleConversationClick(conv.id)}
+                  className={`p-3 mb-2 rounded-lg border border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors relative group ${
+                    chat.currentConversationId === conv.id ? 'bg-blue-50 border-blue-200' : ''
+                  }`}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-gray-800 text-sm mb-1 truncate">
+                        {conv.title}
+                      </div>
+                      <div className="text-xs text-gray-500 mb-2 line-clamp-2">
+                        {conv.preview}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {conv.timestamp}
+                      </div>
+                    </div>
+                    
+                    {/* Delete button */}
+                    <button
+                      onClick={(e) => handleDeleteConversation(conv.id, e)}
+                      className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-100 rounded transition-all duration-200"
+                      title="Delete conversation"
+                    >
+                      <Trash2 className="w-3 h-3 text-red-500" />
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       )}
