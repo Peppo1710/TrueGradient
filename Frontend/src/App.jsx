@@ -2,7 +2,7 @@ import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Signup from './pages/Signup';
 import Signin from './pages/Signin';
-import Chat from './pages/Chat';
+import Chatbot from './pages/Chatbot';
 
 export default function App() {
   return (
@@ -10,7 +10,7 @@ export default function App() {
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
-        <Route path="/chat" element={<Chat />} />
+        <Route path="/chat" element={<Chatbot />} />
       </Routes>
     </BrowserRouter>
   );

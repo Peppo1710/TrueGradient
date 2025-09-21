@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 
-const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+const Sidebar = ({ isCollapsed, onToggle }) => {
   
   // Sample conversation data
   const conversations = [
@@ -33,7 +32,7 @@ const Sidebar = () => {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-md  font-bold text-gray-700">Conversations</h2>
               <button 
-                onClick={() => setIsCollapsed(!isCollapsed)}
+                onClick={onToggle}
                 className="p-1 hover:bg-gray-200 rounded"
               >
                 <ChevronLeft className="w-4 h-4 text-gray-500" />
@@ -73,7 +72,7 @@ const Sidebar = () => {
       {isCollapsed && (
         <div className="flex-1 p-2">
           <button 
-            onClick={() => setIsCollapsed(!isCollapsed)}
+            onClick={onToggle}
             className="w-full p-3 hover:bg-gray-200 rounded-lg mb-4 flex items-center justify-center transition-colors"
           >
             <ChevronRight className="w-5 h-5 text-gray-600" />
