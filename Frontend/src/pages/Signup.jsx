@@ -3,7 +3,7 @@ import { useState } from "react";
 import AuthForm from "../components/Form";
 import { useNavigate } from "react-router-dom";
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_DEV || import.meta.env.VITE_BACKEND_PROD || "http://localhost:5000/";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_PROD;
 
 export default function Signup() {
   const [loading, setLoading] = useState(false);
