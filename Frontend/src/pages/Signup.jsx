@@ -29,7 +29,7 @@ export default function Signup() {
           localStorage.setItem("jwt_token", result.token);
         }
         // Redirect to signin (or wherever you want)
-        navigate("/signin");
+        navigate("/");
         return;
       }
 
