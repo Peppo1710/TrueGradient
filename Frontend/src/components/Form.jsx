@@ -17,9 +17,9 @@ function SignInForm({ onSubmit }) {
 
   return (
     <div className="flex items-center justify-center min-h-screen" style={{ backgroundColor: "#f9fdff" }}>
-      <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-xl p-8 w-[420px] border border-gray-100">
-        <h2 className="text-2xl font-semibold text-gray-900 text-center mb-2">Sign In</h2>
-        <p className="text-gray-500 text-center mb-8 text-sm">Enter your credentials to access your account</p>
+      <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-2xl p-8 w-[448px] border border-gray-200">
+        <h2 className="text-2xl font-semibold text-gray-900 text-center ">Sign In</h2>
+        <p className="text-gray-500 text-center mb-2 text-sm">Enter your credentials to access your account</p>
 
         {/* Username */}
         <label className="block mb-2 text-sm font-medium text-gray-900">Username</label>
@@ -30,7 +30,7 @@ function SignInForm({ onSubmit }) {
           onChange={handleChange}
           placeholder="Enter your username"
           required
-          className="w-full border border-gray-200 rounded-lg px-4 py-3 mb-6 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-900 placeholder-gray-400"
+          className="w-full border text-sm border-gray-100 rounded-2xl px-4 py-2.5 mb-3  focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-900 placeholder-gray-500 shadow-inner"
         />
 
         {/* Password */}
@@ -43,7 +43,7 @@ function SignInForm({ onSubmit }) {
             onChange={handleChange}
             placeholder="Enter your password"
             required
-            className="w-full border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none pr-12 text-gray-900 placeholder-gray-400"
+            className="w-full border  border-gray-100 rounded-2xl text-sm px-4 py-2.5 mb-1  focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-900 placeholder-gray-500 shadow-inner"
           />
           <button
             type="button"
@@ -57,13 +57,13 @@ function SignInForm({ onSubmit }) {
         {/* Submit */}
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white font-medium rounded-lg py-3 text-base hover:bg-blue-600 transition-colors"
+          className="w-full bg-blue-500 text-white font-medium rounded-2xl py-2 text-base hover:bg-blue-400 transition-colors"
         >
           Sign In
         </button>
 
         {/* Link */}
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-gray-500 mt-4">
           Don't have an account?{" "}
           <a href="/" className="text-blue-500 font-medium hover:text-blue-600">
             Sign up
@@ -132,7 +132,7 @@ function SignUpForm({ onSubmit }) {
           onChange={handleChange}
           placeholder="Choose a username"
           required
-          className="w-full border text-sm border-gray-100 rounded-2xl px-4 py-2.5 mb-6  focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-900 placeholder-gray-500 shadow-inner"
+          className="w-full border text-sm border-gray-100 rounded-2xl px-4 py-2.5 mb-3  focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-900 placeholder-gray-500 shadow-inner"
         />
 
         {/* Password */}
@@ -205,7 +205,7 @@ function SignUpForm({ onSubmit }) {
         {/* Link */}
         <p className="text-center text-sm text-gray-500 mt-4">
           Already have an account?{" "}
-          <a href="/signin" className="text-blue-500 font-medium hover:text-blue-600">
+          <a href="/signin" className="text-blue-500 font-medium hover:text-blue-400">
             Sign in
           </a>
         </p>
