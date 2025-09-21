@@ -2,9 +2,8 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
+const { User } = require("../db");
 
-// Simple in-memory user storage (replace with database in production)
-const users = [];
 
 // JWT Secret (use environment variable in production)
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
@@ -20,10 +19,13 @@ router.post("/signup", async (req, res) => {
         error: "Details are required" 
       });
     }
-
+    
+    
     // Check if user already exists
-    const existingUser = users.find(user => user.username === username);
+    const existingUser = await User.findOne({ username });
     if (existingUser) {
+        console.log(existingUser.username);
+        
       return res.status(400).json({ 
         error: "User with this username already exists" 
       });
@@ -31,18 +33,16 @@ router.post("/signup", async (req, res) => {
 
 
     // Create new user
-    const newUser = {
-      id: users.length + 1,
+    const newUser = new User({
       username,
-      password,
-      createdAt: new Date()
-    };
+      password
+    });
 
-    users.push(newUser);
+    await newUser.save();
 
     // Generate JWT token
     const token = jwt.sign(
-      { userId: newUser.id, username: newUser.username },
+      { userId: newUser._id, username: newUser.username },
       JWT_SECRET,
       { expiresIn: "24h" }
     );
@@ -51,7 +51,7 @@ router.post("/signup", async (req, res) => {
       message: "User created successfully",
       token,
       user: {
-        id: newUser.id,
+        id: newUser._id,
         username: newUser.username
       }
     });
@@ -75,7 +75,7 @@ router.post("/signin", async (req, res) => {
     }
 
     // Find user by username
-    const user = users.find(user => user.username === username);
+    const user = await User.findOne({ username });
     if (!user) {
       return res.status(401).json({ 
         error: "Invalid username or password" 
@@ -91,7 +91,7 @@ router.post("/signin", async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { userId: user.id, username: user.username },
+      { userId: user._id, username: user.username },
       JWT_SECRET,
       { expiresIn: "24h" }
     );
@@ -100,7 +100,7 @@ router.post("/signin", async (req, res) => {
       message: "Signin successful",
       token,
       user: {
-        id: user.id,
+        id: user._id,
         username: user.username
       }
     });
@@ -121,7 +121,7 @@ router.post("/signin", async (req, res) => {
 //     }
 
 //     const decoded = jwt.verify(token, JWT_SECRET);
-//     const user = users.find(user => user.id === decoded.userId);
+//     const user = User.find(user => user.id === decoded.userId);
     
 //     if (!user) {
 //       return res.status(404).json({ error: "User not found" });

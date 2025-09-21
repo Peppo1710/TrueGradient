@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const { connectDB } = require("./db");
+// const cors = require("cors");
 
 // Connect to database
 connectDB();
