@@ -35,10 +35,43 @@ export default function Navbar() {
   };
 
   return (
-    <div className="flex items-center justify-between px-6 py-3 bg-white shadow-lg shadow-gray-200/50 border-b border-gray-200">
-      <div className="text-xl font-semibold">AI Chat</div>
+    <>
+      <style jsx>{`
+        .notification-btn {
+  position: relative;
+  padding: 8px 14px;             /* wider than tall -> rectangle */
+  border-radius: 8px;            /* softer corners */
+  transition: all 0.2s ease;
+  cursor: pointer;               /* pointer cursor */
+}
 
-      <div className="flex items-center gap-8">
+.notification-btn:hover {
+  background-color: #ECF5FF;
+  border-radius: 12px;           /* slightly more rounded on hover */
+}
+
+        
+        
+        
+        .notification-badge {
+          position: absolute;
+          top: -4px;
+          right: -4px;
+          width: 20px;
+          height: 20px;
+          font-size: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #2563EB;
+          color: white;
+          border-radius: 50%;
+        }
+      `}</style>
+      <div className="flex items-center justify-between px-6 py-3 bg-white shadow-lg shadow-gray-150 border-b border-gray-200 backdrop-blur-xl shadow-sm">
+        <div className="text-xl font-semibold">AI Chat</div>
+
+      <div className="flex items-center gap-4">
         <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-blue-50 text-blue-600 font-medium shadow-sm border-grsy-500 cursor-default">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -65,14 +98,12 @@ export default function Navbar() {
               setNotifOpen(!notifOpen);
               setMenuOpen(false);
             }}
-            className="relative"
+            className="notification-btn hover:bg-blue-50 rounded-xl"
           >
-            <div>
-            <Bell className="w-4 h-4 text-gray-600" />
-            {unseen && <span className="absolute -top-4 -right-4 w-5 h-5 text-xs flex items-center justify-center bg-blue-600 text-white rounded-full">
+            <Bell className="w-4 h-4 text-gray-600 bell-icon" />
+            {unseen && <span className="notification-badge">
               1
             </span>}
-            </div>
           </button>
 
           {notifOpen && (
@@ -133,33 +164,33 @@ export default function Navbar() {
               setNotifOpen(false);
             }}
           >
-            <span className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white text-sm font-bold">
-              T
+            <span className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white text-sm font-bold avatar-fallback">
+              {username.charAt(0).toUpperCase()}
             </span>
-            <span className="text-sm font-medium text-gray-700">{username}</span>
+            <span className="text-sm font-medium ">{username}</span>
             <ChevronDown className="w-4 h-4 text-gray-500" />
           </button>
 
           {menuOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg overflow-hidden">
-              <div className="flex flex-col text-sm text-gray-700">
-                <div className="flex items-center gap-2 px-4 py-2">
+            <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg overflow-hidden">
+              <div className=" flex flex-col text-sm text-gray-700">
+                <div className="flex items-center gap-3 px-4 py-2">
                   <User className="w-4 h-4 text-gray-500" />
-                  <span>{username}</span>
+                  <span className="text-gray-400">{username}</span>
                 </div>
 
                 <div className="h-px bg-gray-200" />
 
-                <div className="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-50">
+                <div className="flex items-center gap-3 px-4 py-2 cursor-pointer hover:bg-blue-50 rounded-lg  my-1 transition-colors">
                   <Settings className="w-4 h-4 text-gray-500" />
-                  <span>Settings</span>
+                  <span className="text-black">Settings</span>
                 </div>
 
                 <div className="h-px bg-gray-200" />
 
-                <div className="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-50" onClick={handleLogout}>
+                <div className="flex items-center gap-3 px-4 py-2 cursor-pointer hover:bg-blue-50 rounded-lg  my-1 transition-colors" onClick={handleLogout}>
                   <LogOut className="w-4 h-4 text-gray-500" />
-                  <span>Sign Out</span>
+                  <span className="text-black">Sign Out</span>
                 </div>
               </div>
             </div>
@@ -167,5 +198,6 @@ export default function Navbar() {
         </div>
       </div>
     </div>
+    </>
   );
 }
