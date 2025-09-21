@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Bell, ChevronDown } from "lucide-react";
+import { Bell, ChevronDown, MessageSquare } from "lucide-react";
 import { User, Settings, LogOut } from "lucide-react";
 import { useTokenState } from "../hooks/redux";
 import { useNavigate } from "react-router-dom";
@@ -12,12 +12,10 @@ export default function Navbar() {
   const { token } = useTokenState();
   const navigate = useNavigate();
 
-  // Decode JWT from localStorage
   useEffect(() => {
     const jwtToken = localStorage.getItem('jwt_token');
     if (jwtToken) {
       try {
-        // Decode JWT (simple base64 decode, no verification needed for display)
         const payload = JSON.parse(atob(jwtToken.split('.')[1]));
         setUsername(payload.username || "temp");
       } catch (error) {
@@ -27,22 +25,21 @@ export default function Navbar() {
     }
   }, []);
 
-  // Handle logout
   const handleLogout = () => {
     localStorage.removeItem('jwt_token');
     navigate('/signin');
   };
 
+  const handleMarkAllRead = () => {
+    setUnseen(false);
+  };
+
   return (
     <div className="flex items-center justify-between px-6 py-3 bg-white shadow-lg shadow-gray-200/50 border-b border-gray-200">
-      {/* Left: Title */}
       <div className="text-xl font-semibold">AI Chat</div>
 
-      {/* Right: Controls */}
       <div className="flex items-center gap-8">
-        {/* Token Count with Coin Icon */}
         <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-blue-50 text-blue-600 font-medium shadow-sm border-grsy-500 cursor-default">
-          {/* Coin SVG */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
@@ -62,17 +59,16 @@ export default function Navbar() {
           {token.tokensRemaining.toLocaleString()}
         </div>
 
-        {/* Notifications */}
         <div className="relative">
           <button
             onClick={() => {
               setNotifOpen(!notifOpen);
               setMenuOpen(false);
             }}
-            className="relative "
+            className="relative"
           >
-            <div className="  ">
-            <Bell className="w-4 h-4 text-gray-600 " />
+            <div>
+            <Bell className="w-4 h-4 text-gray-600" />
             {unseen && <span className="absolute -top-4 -right-4 w-5 h-5 text-xs flex items-center justify-center bg-blue-600 text-white rounded-full">
               1
             </span>}
@@ -82,21 +78,25 @@ export default function Navbar() {
           {notifOpen && (
             <div className="absolute right-0 mt-2 w-78 bg-white rounded-b-xl shadow-lg">
               <div className="flex justify-between items-center px-8 py-4 border-gray-800 text-md font-medium text-gray-700 bg-blue-100/50">
-                Notifications
-
+                <span>Notifications</span>
+                <button 
+                  onClick={handleMarkAllRead}
+                  className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                >
+                  Mark all read
+                </button>
               </div>
-              <ul className="flex-col divide-y divide-gray-200  text-sm text-gray-700">
-                <div onClick={() => { setUnseen(false) }} className=" flex hover:bg-gray-50">
-                  <div className=" p-2 pl-3" >
-                    {/* Green dot indicator (Tailwind) */}
-                    <span className="inline-block w-2 h-2 rounded-full bg-green-500 "></span>
+              <ul className="flex-col divide-y divide-gray-200 text-sm text-gray-700">
+                <div onClick={() => { setUnseen(false) }} className="flex hover:bg-blue-50/50 rounded-lg mx-2 my-1 transition-colors">
+                  <div className="p-2 pl-3">
+                    <span className="inline-block w-2 h-2 rounded-full bg-green-500"></span>
                   </div>
-                  <li className="  pr-4 pl-2 py-2  cursor-pointer flex flex-col">
+                  <li className="pr-4 pl-2 py-2 cursor-pointer flex flex-col">
                     <div className="flex py-1 justify-between">
-                      <span className="font-bold ">Welcome!</span>
+                      <span className="font-bold">Welcome!</span>
                       <div className="flex justify-center align-center gap-2">
-                        <span className=" text-xs  text-gray-400">6m ago</span>
-                        {unseen && <button ><span className="inline-block  w-2 h-2 rounded-full bg-blue-500 "></span></button>}
+                        <span className="text-xs text-gray-400">5m ago</span>
+                        {unseen && <button><span className="inline-block w-2 h-2 rounded-full bg-blue-500"></span></button>}
                       </div>
                     </div>
                     <span className="text-gray-500 text-sm pb-2">
@@ -104,17 +104,15 @@ export default function Navbar() {
                     </span>
                   </li>
                 </div>
-                <div className="  flex hover:bg-gray-50">
-                  <div className=" p-2 pl-3" >
-                    {/* Green dot indicator (Tailwind) */}
-                    <span className="inline-block w-2 h-2 rounded-full bg-blue-500 "></span>
+                <div className="flex hover:bg-blue-50/50 rounded-lg mx-2 my-1 transition-colors">
+                  <div className="p-2 pl-3">
+                    <span className="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
                   </div>
-                  <li className="  pr-4 pl-2 py-2  cursor-pointer flex flex-col">
+                  <li className="pr-4 pl-2 py-2 cursor-pointer flex flex-col">
                     <div onClick={() => { setUnseen(false) }} className="flex py-1 justify-between">
-                      <span className="font-bold ">Feature Update</span>
+                      <span className="font-bold">Feature Update</span>
                       <div className="flex justify-center align-center gap-2">
-                        <span className=" text-xs  text-gray-400">6m ago</span>
-
+                        <span className="text-xs text-gray-400">2h ago</span>
                       </div>
                     </div>
                     <span className="text-gray-500 text-sm pb-2">
@@ -122,13 +120,11 @@ export default function Navbar() {
                     </span>
                   </li>
                 </div>
-
               </ul>
             </div>
           )}
         </div>
 
-        {/* Avatar + Dropdown */}
         <div className="relative">
           <button
             className="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-blue-100/50 hover:rounded-2xl"
@@ -137,7 +133,6 @@ export default function Navbar() {
               setNotifOpen(false);
             }}
           >
-            {/* Gradient Avatar */}
             <span className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white text-sm font-bold">
               T
             </span>
@@ -148,25 +143,20 @@ export default function Navbar() {
           {menuOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg overflow-hidden">
               <div className="flex flex-col text-sm text-gray-700">
-                {/* Username */}
                 <div className="flex items-center gap-2 px-4 py-2">
                   <User className="w-4 h-4 text-gray-500" />
                   <span>{username}</span>
                 </div>
 
-                {/* Divider */}
                 <div className="h-px bg-gray-200" />
 
-                {/* Settings */}
                 <div className="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-50">
                   <Settings className="w-4 h-4 text-gray-500" />
                   <span>Settings</span>
                 </div>
 
-                {/* Divider */}
                 <div className="h-px bg-gray-200" />
 
-                {/* Sign Out */}
                 <div className="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-50" onClick={handleLogout}>
                   <LogOut className="w-4 h-4 text-gray-500" />
                   <span>Sign Out</span>

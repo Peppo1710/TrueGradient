@@ -5,7 +5,7 @@ const initialState = {
   tokensUsed: 0,
   tokensRemaining: 1250,
   costPerMessage: 10, // Tokens cost per message
-  costPerResponse: 1, // Tokens cost per AI response
+  costPerResponse: 0.5, // Tokens cost per AI response
 };
 
 const tokenSlice = createSlice({

@@ -24,20 +24,37 @@ export default function Signin() {
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
+      let result;
+      try {
+        result = await response.json();
+      } catch (parseError) {
+        console.error("JSON parse error:", parseError);
+        setError("Server returned invalid response. Please try again.");
+        return;
+      }
 
       if (response.ok) {
-        // Store JWT in localStorage
         localStorage.setItem('jwt_token', result.token);
         console.log("Signin successful:", result);
-        navigate('/chat')
-        // Redirect or show success message
+        navigate('/chat');
       } else {
-        setError(result.error || 'Signin failed');
+        if (response.status >= 500) {
+          setError("Server error. Please try again later.");
+        } else if (response.status === 400) {
+          setError(result.error || "Invalid credentials provided.");
+        } else if (response.status === 401) {
+          setError(result.error || "Invalid username or password.");
+        } else {
+          setError(result.error || result.message || "Signin failed. Please try again.");
+        }
       }
     } catch (err) {
-      setError('Network error. Please try again.');
       console.error("Signin error:", err);
+      if (err.name === 'TypeError' && err.message.includes('fetch')) {
+        setError("Cannot connect to server. Please check your internet connection.");
+      } else {
+        setError("Network error. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -45,7 +62,14 @@ export default function Signin() {
 
   return (
     <div>
-      {error && <div style={{color: 'red', marginBottom: '10px'}}>{error}</div>}
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 flex items-center">
+          <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+          </svg>
+          {error}
+        </div>
+      )}
       <AuthForm 
         type="signin" 
         onSubmit={handleSignIn}
