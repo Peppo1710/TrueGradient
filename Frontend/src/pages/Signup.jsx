@@ -3,7 +3,7 @@ import { useState } from "react";
 import AuthForm from "../components/Form";
 import { useNavigate } from "react-router-dom";
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_PROD;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_PROD 
 
 export default function Signup() {
   const [loading, setLoading] = useState(false);
@@ -15,7 +15,8 @@ export default function Signup() {
     setError(null);
 
     try {
-      const response = await fetch(`${BACKEND_URL}api/auth/signup`, {
+      console.log("Using BACKEND_URL:", BACKEND_URL);
+      const response = await fetch(`${BACKEND_URL}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

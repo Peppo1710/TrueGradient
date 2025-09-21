@@ -15,7 +15,8 @@ export default function Signin() {
     setError(null);
     
     try {
-      const response = await fetch(`${BACKEND_URL}api/auth/signin`, {
+      console.log(BACKEND_URL);
+      const response = await fetch(`${BACKEND_URL}/api/auth/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
