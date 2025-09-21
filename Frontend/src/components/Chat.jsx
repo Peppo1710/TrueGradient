@@ -104,29 +104,31 @@ const Chat = ({ sidebarCollapsed }) => {
       <div className="flex-1 overflow-y-auto">
         {chat.isWelcomeScreen ? (
           <div className="flex flex-col items-center justify-center h-full px-8">
-            <div className="mb-8">
-              <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4">
-                <MessageSquare className="lucide lucide-message-square h-16 w-16 mx-auto mb-2 opacity-50 text-blue-600" />
+            <div className="">
+              <div className="w-24 h-24 rounded-2xl flex items-center justify-center ">
+                {/* <MessageSquare className="lucide lucide-message-square h-16 w-16 mx-auto mb-2 opacity-50 text-blue-600" />
+                 */}
+                 <img src="Chat.png" alt="Chat" />
               </div>
             </div>
 
-            <h1 className="text-3xl font-semibold text-gray-800 mb-4">Welcome to AI Chat</h1>
-            <p className="text-gray-500 text-center max-w-2xl mb-12">
+            <h1 className="text-2xl font-semibold text-gray-800 mb-2">Welcome to AI Chat</h1>
+            <p className="text-gray-500 text-center max-w-2xl mb-4">
               Start a conversation with our AI assistant. Ask questions, get help with tasks, or explore ideas together.
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl w-full">
               {suggestedPrompts.map((prompt, index) => (
                 <button
                   key={index}
                   onClick={() => handlePromptClick(prompt)}
-                  className="p-4 border border-gray-200 rounded-lg hover:border-gray-300 hover:bg-gray-50 text-left transition-colors"
+                  className="p-3 shadow-md border border-gray-200 rounded-2xl hover:border-gray-300 hover:bg-gray-50 text-left transition-colors"
                 >
                   <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 flex items-center justify-center mt-0.5">
-                      <MessageSquare className="lucide lucide-message-square h-5 w-5 mx-auto mb-2 opacity-50 text-blue-600" />
+                    <div className="w-4 h-4 flex items-center justify-center">
+                      <MessageSquare className="lucide lucide-message-square h-4 w-4 text-black" />
                     </div>
-                    <span className="text-gray-700">{prompt}</span>
+                    <span className="font-semibold text-sm">{prompt}</span>
                   </div>
                 </button>
               ))}
@@ -170,7 +172,7 @@ const Chat = ({ sidebarCollapsed }) => {
               onChange={(e) => dispatch(setInputMessage(e.target.value))}
               onKeyPress={handleKeyPress}
               placeholder={chat.isWelcomeScreen ? "Ask me anything..." : "Type your message..."}
-              className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent"
               rows="1"
               style={{ minHeight: '48px' }}
               disabled={chat.isLoading}
