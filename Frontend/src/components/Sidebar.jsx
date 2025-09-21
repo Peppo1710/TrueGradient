@@ -69,7 +69,7 @@ const Sidebar = () => {
         </div>
       )}
 
-      {/* Collapsed View */}
+      {/* Collapsed Vieww */}
       {isCollapsed && (
         <div className="flex-1 p-2">
           <button 
