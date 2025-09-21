@@ -1,13 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bell, ChevronDown } from "lucide-react";
 import { User, Settings, LogOut } from "lucide-react";
 import { useTokenState } from "../hooks/redux";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [unseen, setUnseen] = useState(true);
+  const [username, setUsername] = useState("temp");
   const { token } = useTokenState();
+  const navigate = useNavigate();
+
+  // Decode JWT from localStorage
+  useEffect(() => {
+    const jwtToken = localStorage.getItem('jwt_token');
+    if (jwtToken) {
+      try {
+        // Decode JWT (simple base64 decode, no verification needed for display)
+        const payload = JSON.parse(atob(jwtToken.split('.')[1]));
+        setUsername(payload.username || "temp");
+      } catch (error) {
+        console.error("Error decoding JWT:", error);
+        setUsername("temp");
+      }
+    }
+  }, []);
+
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem('jwt_token');
+    navigate('/signin');
+  };
 
   return (
     <div className="flex items-center justify-between px-6 py-3 bg-white shadow-lg shadow-gray-200/50 border-b border-gray-200">
@@ -117,7 +141,7 @@ export default function Navbar() {
             <span className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white text-sm font-bold">
               T
             </span>
-            <span className="text-sm font-medium text-gray-700">temp</span>
+            <span className="text-sm font-medium text-gray-700">{username}</span>
             <ChevronDown className="w-4 h-4 text-gray-500" />
           </button>
 
@@ -127,7 +151,7 @@ export default function Navbar() {
                 {/* Username */}
                 <div className="flex items-center gap-2 px-4 py-2">
                   <User className="w-4 h-4 text-gray-500" />
-                  <span>temp</span>
+                  <span>{username}</span>
                 </div>
 
                 {/* Divider */}
@@ -143,7 +167,7 @@ export default function Navbar() {
                 <div className="h-px bg-gray-200" />
 
                 {/* Sign Out */}
-                <div className="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-50">
+                <div className="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-50" onClick={handleLogout}>
                   <LogOut className="w-4 h-4 text-gray-500" />
                   <span>Sign Out</span>
                 </div>
